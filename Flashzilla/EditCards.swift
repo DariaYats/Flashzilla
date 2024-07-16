@@ -19,7 +19,15 @@ struct EditCards: View {
                 Section("Add new card") {
                     TextField("Promt", text: $newPromt)
                     TextField("Answer", text: $newAnswer)
-                    Button("Add card", action: addCards)
+                    Button {
+                        addCards()
+                        newPromt = ""
+                        newAnswer = ""
+                    } label: {
+                        Text("Add card")
+                            .font(.headline)
+                    }
+                    .padding(.leading, 100)
                 }
                 
                 Section {
