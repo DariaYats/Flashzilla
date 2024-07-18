@@ -64,7 +64,7 @@ struct CardView: View {
                     offset = gesture.translation
                 }
                 .onEnded { _ in
-                    if offset.width > 100 {
+                    if abs(offset.width) > 100 {
                         removal?()
                     } else {
                         offset = .zero

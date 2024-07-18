@@ -21,13 +21,10 @@ struct EditCards: View {
                     TextField("Answer", text: $newAnswer)
                     Button {
                         addCards()
-                        newPromt = ""
-                        newAnswer = ""
                     } label: {
                         Text("Add card")
                             .font(.headline)
                     }
-                    .padding(.leading, 100)
                 }
                 
                 Section {
@@ -81,6 +78,11 @@ struct EditCards: View {
     func removeCards(at offsets: IndexSet) {
         cards.remove(atOffsets: offsets)
         saveData()
+    }
+    
+    func cleanTextField() {
+        newPromt = ""
+        newAnswer = ""
     }
 }
 
