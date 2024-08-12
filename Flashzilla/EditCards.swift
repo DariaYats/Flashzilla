@@ -73,6 +73,7 @@ struct EditCards: View {
         let card = Card(promt: trimmedPromt, answer: trimmedAnswer)
         cards.insert(card, at: 0)
         saveData()
+        cleanTextField()
     }
     
     func removeCards(at offsets: IndexSet) {
