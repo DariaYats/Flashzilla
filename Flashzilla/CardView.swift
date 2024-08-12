@@ -79,5 +79,5 @@ struct CardView: View {
 }
 
 #Preview {
-    CardView(card: .example)
+    CardView(card: Card(promt: "How lond does octopus live?", answer: "4 years in avarege"))
 }

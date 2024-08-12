@@ -4,7 +4,7 @@
 //
 //  Created by Дарья Яцынюк on 02.07.2024.
 //
-
+import SwiftData
 import SwiftUI
 
 extension View {
