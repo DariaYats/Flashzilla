@@ -6,11 +6,33 @@
 //
 
 import Foundation
+import SwiftData
 
-
-struct Card: Codable {
+@Model
+class Card: Codable {
+    enum CodingKeys: CodingKey {
+        case promt, answer
+    }
+    
     var promt: String
     var answer: String
     
-    static let example = Card(promt: "Who played special FBI agent in Twin Peaks", answer: "Kyle Maclachlan")
+    init(promt: String, answer: String) {
+        self.promt = promt
+        self.answer = answer
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        promt = try container.decode(String.self, forKey: .promt)
+        answer =  try container.decode(String.self, forKey: .answer)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(promt, forKey: .promt)
+        try container.encode(answer, forKey: .answer)
+    }
+    
+    
 }
