@@ -35,11 +35,11 @@ struct CardView: View {
             
             VStack {
                 if accessibilityVoiceOverEnabled {
-                    Text(isShowingAnswer ? card.answer : card.promt)
+                    Text(isShowingAnswer ? card.answer : card.prompt)
                         .font(.largeTitle)
                         .foregroundStyle(.black)
                 } else {
-                    Text(card.promt)
+                    Text(card.prompt)
                         .font(.largeTitle)
                         .foregroundStyle(.black)
                     
@@ -79,5 +79,5 @@ struct CardView: View {
 }
 
 #Preview {
-    CardView(card: Card(promt: "How lond does octopus live?", answer: "4 years in avarege"))
+    CardView(card: Card(prompt: "How lond does octopus live?", answer: "4 years in avarege"))
 }

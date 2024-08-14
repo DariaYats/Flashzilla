@@ -11,26 +11,26 @@ import SwiftData
 @Model
 class Card: Codable {
     enum CodingKeys: CodingKey {
-        case promt, answer
+        case prompt, answer
     }
     
-    var promt: String
+    var prompt: String
     var answer: String
     
-    init(promt: String, answer: String) {
-        self.promt = promt
+    init(prompt: String, answer: String) {
+        self.prompt = prompt
         self.answer = answer
     }
     
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        promt = try container.decode(String.self, forKey: .promt)
+        prompt = try container.decode(String.self, forKey: .prompt)
         answer =  try container.decode(String.self, forKey: .answer)
     }
     
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(promt, forKey: .promt)
+        try container.encode(prompt, forKey: .prompt)
         try container.encode(answer, forKey: .answer)
     }
     

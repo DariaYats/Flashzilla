@@ -18,7 +18,8 @@ struct ContentView: View {
     @Environment(\.accessibilityDifferentiateWithoutColor) var accessibilityDifferentiateWithoutColor
     @Environment(\.accessibilityVoiceOverEnabled) var accessibilityVoiceOverEnabled
     
-    @State private var cards = [Card]()
+    @Environment(\.modelContext) var modelContext
+    @Query var cards: [Card]
     @State private var showingEditScreen = false
     
     @State private var timeRemaining = 100
@@ -45,7 +46,7 @@ struct ContentView: View {
                     ForEach(0..<cards.count, id: \.self) { index in
                         CardView(card: cards[index]) {
                             withAnimation {
-                                removeCard(at: index)
+                                deleteCard(at: index)
                             }
                         }
                             .stacked(at: index, in: cards.count)
@@ -91,7 +92,7 @@ struct ContentView: View {
                     HStack {
                         Button {
                             withAnimation {
-                                removeCard(at: cards.count - 1)
+                                deleteCard(at: cards.count - 1)
                             }
                         } label: {
                             Image(systemName: "xmark.circle")
@@ -106,7 +107,7 @@ struct ContentView: View {
                         
                         Button {
                             withAnimation {
-                                removeCard(at: cards.count - 1)
+                                deleteCard(at: cards.count - 1)
                             }
                         } label: {
                             Image(systemName: "checkmark.circle")
@@ -144,13 +145,20 @@ struct ContentView: View {
         .onAppear(perform: resetCards)
     }
     
-    func removeCard(at index: Int) {
+    func deleteCard(at index: Int) {
         guard index >= 0 else { return }
-        cards.remove(at: index)
+        let cardToDelete = cards[index]
+        modelContext.delete(cardToDelete)
         
-        if cards.isEmpty {
-            isActive = false
+        do {
+            try modelContext.save()
+        } catch {
+            print("Failed to save context after deletion.")
         }
+            
+            if cards.isEmpty {
+                isActive = false
+            }
     }
     
     func resetCards() {
@@ -158,14 +166,38 @@ struct ContentView: View {
         isActive = true
         loadData()
     }
-    
+ 
     func loadData() {
         if let data = UserDefaults.standard.data(forKey: "Cards") {
-            if let decoded = try? JSONDecoder().decode([Card].self, from: data) {
-                cards = decoded
+            if let decodedCards = try? JSONDecoder().decode([Card].self, from: data) {
+                for card in decodedCards {
+                    modelContext.insert(card)
+                }
+                do {
+                    try modelContext.save()
+                } catch {
+                    print("Error saving the context: \(error)")
+                }
             }
         }
     }
+    
+//    func loadData() {
+//        do {
+//            guard let url = Bundle.main.url(forResource: "cards", withExtension: "json") else {
+//                fatalError("Failed to find cards.json.")
+//            }
+//            
+//            let data = try Data(contentsOf: url)
+//            let cards = try JSONDecoder().decode([Card].self, from: data)
+//            
+//            for card in cards {
+//                modelContext.insert(card)
+//            }
+//        } catch {
+//                print("Failed to load card.")
+//            }
+//    }
 }
 
 #Preview {
